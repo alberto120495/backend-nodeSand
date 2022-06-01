@@ -1,7 +1,6 @@
 import Usuario from "../models/Usuario.js";
 import { validationResult } from "express-validator";
 import generarJWT from "../helpers/generarJWT.js";
-import jwt from "jsonwebtoken";
 
 const registrar = async (req, res) => {
   //Mensajes error de express-validator

@@ -13,4 +13,9 @@ const validacionLogin = [
   check("password", "El password es obligatorio").not().isEmpty(),
 ];
 
-export { validacionRegistro, validacionLogin };
+const validacionEnlace = [
+  check("nombre", "Sube un archivo").not().isEmpty(),
+  check("nombre_original", "Sube un archivo").not().isEmpty(),
+];
+
+export { validacionRegistro, validacionLogin, validacionEnlace };
