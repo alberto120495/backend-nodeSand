@@ -39,4 +39,28 @@ const nuevoEnlace = async (req, res) => {
   }
 };
 
-export { nuevoEnlace };
+const obtenerEnlace = async (req, res, next) => {
+  const { url } = req.params;
+
+  const enlace = await Enlace.findOne({ url });
+
+  if (!enlace) {
+    return res.status(404).json({ msg: "Enlace no encontrado" });
+  }
+
+  res.json({ archivo: enlace.nombre });
+
+  const { descargas, nombre } = enlace;
+  //Descargas igual a 1 Eliminar entrada y archivo
+  if (descargas === 1) {
+    req.archivo = nombre;
+    await Enlace.findOneAndRemove({ url });
+    next();
+  } else {
+    //Descargas mayores a 1 restar 1 a descargas
+    enlace.descargas--;
+    await enlace.save();
+  }
+};
+
+export { nuevoEnlace, obtenerEnlace };
