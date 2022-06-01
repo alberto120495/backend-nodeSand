@@ -8,4 +8,9 @@ const validacionRegistro = [
   }),
 ];
 
-export { validacionRegistro };
+const validacionLogin = [
+  check("email", "Agrega un email valido").isEmail(),
+  check("password", "El password es obligatorio").not().isEmpty(),
+];
+
+export { validacionRegistro, validacionLogin };
