@@ -9,11 +9,12 @@ const nuevoEnlace = async (req, res) => {
   if (!errores.isEmpty()) {
     return res.status(400).json({ errores: errores.array() });
   }
-  const { nombre_original } = req.body;
+
+  const { nombre_original, nombre } = req.body;
 
   const enlace = new Enlace();
   enlace.url = shortid.generate();
-  enlace.nombre = shortid.generate();
+  enlace.nombre = nombre;
   enlace.nombre_original = nombre_original;
 
   if (req.usuario) {
@@ -32,7 +33,7 @@ const nuevoEnlace = async (req, res) => {
   try {
     await enlace.save();
     res.json({
-      msg: `Enlace creado correctamente: ${enlace.url}`,
+      msg: enlace.url,
     });
   } catch (error) {
     console.log(`(╯°□°）╯︵ ┻━┻ |>ERROR: ${error}`);
