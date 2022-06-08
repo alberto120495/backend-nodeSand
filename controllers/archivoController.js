@@ -1,6 +1,7 @@
 import multer from "multer";
 import shortid from "shortid";
 import fs from "fs";
+import Enlace from "../models/Enlace.js";
 
 const subirArchivo = async (req, res) => {
   const configuracionMulter = {
@@ -42,4 +43,27 @@ const eliminarArchivo = async (req, res) => {
   }
 };
 
-export { subirArchivo, eliminarArchivo };
+const descargar = async (req, res, next) => {
+  //Obtiene el enlace
+  const { archivo } = req.params;
+  const enlace = await Enlace.findOne({ nombre: archivo });
+
+  console.log(enlace);
+
+  res.download(`uploads/${archivo}`);
+
+  //Eliminar el archivo y entrada
+  const { descargas, nombre } = enlace;
+  //Descargas igual a 1 Eliminar entrada y archivo
+  if (descargas === 1) {
+    req.archivo = nombre;
+    await Enlace.findOneAndRemove(enlace.id);
+    next();
+  } else {
+    //Descargas mayores a 1 restar 1 a descargas
+    enlace.descargas--;
+    await enlace.save();
+  }
+};
+
+export { subirArchivo, eliminarArchivo, descargar };

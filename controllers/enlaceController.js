@@ -40,6 +40,15 @@ const nuevoEnlace = async (req, res) => {
   }
 };
 
+const todosEnlaces = async (req, res, next) => {
+  try {
+    const enlaces = await Enlace.find({}).select("url -_id");
+    res.json({ enlaces });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const obtenerEnlace = async (req, res, next) => {
   const { url } = req.params;
 
@@ -51,17 +60,7 @@ const obtenerEnlace = async (req, res, next) => {
 
   res.json({ archivo: enlace.nombre });
 
-  const { descargas, nombre } = enlace;
-  //Descargas igual a 1 Eliminar entrada y archivo
-  if (descargas === 1) {
-    req.archivo = nombre;
-    await Enlace.findOneAndRemove({ url });
-    next();
-  } else {
-    //Descargas mayores a 1 restar 1 a descargas
-    enlace.descargas--;
-    await enlace.save();
-  }
+  next();
 };
 
-export { nuevoEnlace, obtenerEnlace };
+export { nuevoEnlace, obtenerEnlace, todosEnlaces };

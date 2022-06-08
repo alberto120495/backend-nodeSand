@@ -19,7 +19,7 @@ const whiteList = [process.env.FRONTEND_URL];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (whiteList.includes(origin)) {
+    if (whiteList.indexOf(origin) !== -1 || !origin) {
       //Puede consultar la API
       callback(null, true);
     } else {
@@ -30,6 +30,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+//Habilitar carpeta publica
+app.use(express.static("uploads"));
 
 const port = process.env.PORT || 4000;
 
